@@ -18,6 +18,9 @@ Create AKS cluster that implement Bonita workload, this cluster may be totally p
 * Azure Kubernetes Services
 * YAML
 * Grafana
+* Container Registry
+* Key Vault
+* Azure Disk
 
 ### Azure Architecture
 
