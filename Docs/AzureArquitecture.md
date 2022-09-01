@@ -41,4 +41,6 @@ Private Link is an azure component that enable the private access to paas compon
 
 ## VM
 VM is a jumb box to private cluster for this workload is an access to cluster management and also to Bonita workload
+
+## Diagram
 <img src="https://github.com/RodrigoVeraSYS/AKS-Private/blob/main/Img/Arquitecture.jpg" width="385px" align="center">
