@@ -16,7 +16,7 @@ param publicFirewallIpName string = 'firewallIPRVR'
 param fileShareName string = 'dbfileshare'
 param storageName string = 'storageaccountrvr'
 
-param keyVaultName string = 'keyvaultprivateRVR'
+param keyVaultName string = 'keyvaultRVR'
 
 
 param secretPassword string = 'PasswordPostgress'
@@ -26,7 +26,14 @@ param userValue string = 'AdminPostgress'
 
 param privateKeyVaultName string = 'privatekeyvaultRVR'
 param privateStorageName string = 'privatestorageRVR'
-param privateZoneName string = 'privateZoneRVR'
+
+param aksName string = 'privateAKS-RVR'
+param kubernetesVersion string  = '1.23.8'
+param dnsPrefix string = 'aks-dns'
+param serviceCidr string = '10.0.0.0/16'
+param dnsServiceIP string = '10.0.0.10'
+param dockerBridgeCidr string = '172.17.0.1/16'
+
 
 targetScope = 'subscription'
 
@@ -124,10 +131,9 @@ module privateEndponts 'privateEndpoints.bicep' = {
   params:{
     privateKeyVaultName : privateKeyVaultName
     privateStorageName : privateStorageName
-    privateZoneName : privateZoneName
     location : location
-    subnetId : networking.outputs.vnetSpoke.properties.subnets[0].Id
-    vnetId : networking.outputs.vnetSpoke.id
+    subnetId : networking.outputs.vnetSpoke.properties.subnets[1].Id
+    vnetId : networking.outputs.spokeId
     keyVaultId: keyV.outputs.keyvaultId 
     storageId : storage.outputs.storageAccountID
   }
@@ -135,5 +141,23 @@ module privateEndponts 'privateEndpoints.bicep' = {
     networking
     storage
     keyV
+  ]
+}
+
+module aks 'aks.bicep'={
+  name: 'aksrvr'
+  scope: resourceGroup(rg.name)
+  params:{
+    aksName : aksName
+    location : location
+    kubernetesVersion: kubernetesVersion
+    dnsPrefix: dnsPrefix
+    subnetId : networking.outputs.vnetSpoke.properties.subnets[0].Id
+    serviceCidr : serviceCidr
+    dnsServiceIP: dnsServiceIP
+    dockerBridgeCidr : dockerBridgeCidr
+  }
+  dependsOn:[
+    networking
   ]
 }

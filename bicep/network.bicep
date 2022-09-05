@@ -19,9 +19,9 @@ var hubConfig = {
 var spokeConfig = {
   addressSpacePrefix: '10.240.0.0/16'
   subnetPrivateLinkName: 'SubnetPrivateLink'
-  subnetPrivateLinkPrefix: '10.240.0.0/26'
-  subnetLoadBalancerName : 'SubnetLoadBalancerName'
-  subnetLoadBalancerPrefix : '10.240.0.64/26'
+  subnetPrivateLinkPrefix: '10.240.8.0/26'
+  subnetAKSName : 'SubnetAKS'
+  subnetAKSPrefix : '10.240.0.0/21'
 }
 
 resource networkSecurityGroupStandard 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
@@ -107,17 +107,18 @@ resource vnetSpoke 'Microsoft.Network/virtualNetworks@2020-05-01' = {
     }
     subnets: [
       {
+        name: spokeConfig.subnetAKSName
+        properties: {
+          addressPrefix: spokeConfig.subnetAKSPrefix
+        }
+      }
+      {
         name: spokeConfig.subnetPrivateLinkName
         properties: {
           addressPrefix: spokeConfig.subnetPrivateLinkPrefix
         }
       }
-      {
-        name: spokeConfig.subnetLoadBalancerName
-        properties: {
-          addressPrefix: spokeConfig.subnetLoadBalancerPrefix
-        }
-      }
+      
     ]
   }
 }
@@ -152,5 +153,6 @@ resource VnetPeeringSHubSpoke 'Microsoft.Network/virtualNetworks/virtualNetworkP
 
 output vnetSpoke object = vnetSpoke
 output vnetHub object = vnetHub
+output spokeId string = vnetSpoke.id
 output nsg string = networkSecurityGroupStandard.id
 
