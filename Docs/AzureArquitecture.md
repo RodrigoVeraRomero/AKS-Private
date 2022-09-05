@@ -3,15 +3,6 @@
 This architecture is based on the AKS Baseline architecture that Microsoft's recommended as starting point for AKS infrastructure
 https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks/baseline-aks
 
-<<<<<<< HEAD
-## SPOKE VNET 
-Virtual Network for AKS cluster (10.200.0.0/24)
-* Subnet Privatelinks: For Azure Key Vault, Container Registry and Azure Disk
-* Subnet Internal Load Balencer: For AKS-Managed Balancer
-
-## HUB
-Virtual Network for connectivity (10.240.0.0/16)
-=======
 ## Networking
 Hub-Spoke network is a topology that help us to organize our workloads, Hub like a unique point of connectivity to our workload that help to have the control for ingress and egress and spoke is a isolated network in which will be allocate the workload components. Spoke could be one or more network in the topology. In this exercise is proposed to have a hub and one spoke networking in spoke networking will contain an isolated AKS whit full configuration of Bonita 
 
@@ -22,7 +13,6 @@ Virtual Network for AKS cluster (11.100.0.0/24)
 
 ### HUB
 Virtual Network for connectivity (11.140.0.0/16)
->>>>>>> 517e459f0d311c18b22d1cf989caf07baed58b09
 * Subnet Firewall: For outboud restrictions
 * Subnet Bastion: For VM Connectivity
 * Subnet VM: For VM to access to AKS
