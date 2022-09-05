@@ -16,6 +16,8 @@ param bastionName string
 
 param publicIpName string 
 
+param nsg string
+
 resource vmNic 'Microsoft.Network/networkInterfaces@2021-02-01' = {
   name: 'vmNic'
   location: location
@@ -31,6 +33,9 @@ resource vmNic 'Microsoft.Network/networkInterfaces@2021-02-01' = {
         }
       }
     ]
+    networkSecurityGroup: {
+      id: nsg
+    }
   }
 }
 
@@ -111,8 +116,5 @@ resource bastion 'Microsoft.Network/bastionHosts@2021-02-01' = {
     ]
   }
 }
-
-
-output publicIp string = publicIPAddress.id
 
 

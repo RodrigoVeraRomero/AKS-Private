@@ -6,7 +6,7 @@ param routeTableName string
 
 var hubConfig = {
   addressSpacePrefix: '10.200.0.0/24'
-  subnetFirewall: 'SubnetFirewall'
+  subnetFirewall: 'AzureFirewallSubnet'
   subnetFirewallPrefix: '10.200.0.0/26'
   subnetVm : 'SubnetVM'
   subnetVmPrefix: '10.200.0.64/26'
@@ -64,9 +64,6 @@ resource vnetHub 'Microsoft.Network/virtualNetworks@2020-05-01' = {
         name: hubConfig.subnetFirewall
         properties: {
           addressPrefix: hubConfig.subnetFirewallPrefix
-          networkSecurityGroup: {
-            id: networkSecurityGroupStandard.id
-          }
         }
       }
       {
@@ -155,4 +152,5 @@ resource VnetPeeringSHubSpoke 'Microsoft.Network/virtualNetworks/virtualNetworkP
 
 output vnetSpoke object = vnetSpoke
 output vnetHub object = vnetHub
+output nsg string = networkSecurityGroupStandard.id
 

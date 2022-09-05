@@ -11,6 +11,22 @@ param vmKey string  = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDONgnDaI3vUbguZ8WsA
 param bastionName string = 'bastionVMRVR'
 param publicIpName string = 'publicBastionRVR'
 param firewallName string = 'firewallName'
+param publicFirewallIpName string = 'firewallIPRVR'
+
+param fileShareName string = 'dbfileshare'
+param storageName string = 'storageaccountrvr'
+
+param keyVaultName string = 'keyvaultprivateRVR'
+
+
+param secretPassword string = 'PasswordPostgress'
+param passwordValue string = 'npKdammFd-.4?ds'
+param secretUser  string = 'userpostgress'
+param userValue string = 'AdminPostgress'
+
+param privateKeyVaultName string = 'privatekeyvaultRVR'
+param privateStorageName string = 'privatestorageRVR'
+param privateZoneName string = 'privateZoneRVR'
 
 targetScope = 'subscription'
 
@@ -18,9 +34,8 @@ targetScope = 'subscription'
 
 resource rg 'Microsoft.Resources/resourceGroups@2020-06-01' = {
   location: location
-  name: 'pruebaAKSprivate'
+  name: 'AKSprivate'
 }
-
 /*NETWORKING*/
 
 module networking '../bicep/network.bicep' = {
@@ -34,6 +49,9 @@ module networking '../bicep/network.bicep' = {
   }
 
 }
+/****************************************************************************************************************************/
+/********************************************************HUB COMPONENTS******************************************************/
+/****************************************************************************************************************************/
 
 
 /*VIRTUAL MACHINE*/
@@ -49,6 +67,7 @@ module vmfinal '../bicep/vm.bicep' = {
     bastionName : bastionName
     bastionSubnetId: networking.outputs.vnetHub.properties.subnets[2].Id
     vmSubnetId: networking.outputs.vnetHub.properties.subnets[1].Id
+    nsg: networking.outputs.nsg
   }
   dependsOn:[
     networking
@@ -62,10 +81,59 @@ module firewall 'firewall.bicep' = {
     location: location
     firewallName : firewallName
     subnetfirewall : networking.outputs.vnetHub.properties.subnets[0].Id
-    publicIp: vmfinal.outputs.publicIp
+    publicFirewallIpName: publicFirewallIpName
   }
   dependsOn:[
     networking
     vmfinal
+  ]
+}
+
+
+/****************************************************************************************************************************/
+/********************************************************SPOKE COMPONENTS*****************************************************/
+/****************************************************************************************************************************/
+module storage 'storage.bicep' ={
+   name:'storage'
+   scope:resourceGroup(rg.name)
+   params: {
+     fileShareName: fileShareName
+     location:location
+     storageName: storageName
+   }
+}
+
+module keyV 'keyvault.bicep' ={
+  name: 'keyV'
+  scope: resourceGroup(rg.name)
+  params:{
+    keyVaultName: keyVaultName
+    location: location
+    passwordValue: passwordValue
+    userValue: userValue
+
+    secretPassword: secretPassword
+    secretUser: secretUser
+    tenant: subscription().tenantId  
+  }
+}
+
+module privateEndponts 'privateEndpoints.bicep' = {
+  name: 'privateendpoints'
+  scope: resourceGroup(rg.name)
+  params:{
+    privateKeyVaultName : privateKeyVaultName
+    privateStorageName : privateStorageName
+    privateZoneName : privateZoneName
+    location : location
+    subnetId : networking.outputs.vnetSpoke.properties.subnets[0].Id
+    vnetId : networking.outputs.vnetSpoke.id
+    keyVaultId: keyV.outputs.keyvaultId 
+    storageId : storage.outputs.storageAccountID
+  }
+  dependsOn:[
+    networking
+    storage
+    keyV
   ]
 }

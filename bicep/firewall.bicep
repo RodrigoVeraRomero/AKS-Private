@@ -1,8 +1,21 @@
 param firewallName string
 param subnetfirewall string
-param publicIp string
+param publicFirewallIpName string
 
 param location string = resourceGroup().location
+
+
+resource publicFirewallIPAddress 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
+  name: publicFirewallIpName
+  location: location
+  sku: {
+    name: 'Standard'
+    tier: 'Regional'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Static'
+  }
+}
 
 resource firewall 'Microsoft.Network/azureFirewalls@2021-05-01' = {
   name: firewallName
@@ -16,7 +29,7 @@ resource firewall 'Microsoft.Network/azureFirewalls@2021-05-01' = {
             id: subnetfirewall
           }
           publicIPAddress: {
-            id: publicIp
+            id: publicFirewallIPAddress.id
           }
         }
       }
