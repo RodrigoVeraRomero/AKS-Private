@@ -2,12 +2,12 @@
 
 
 ## SPOKE VNET 
-Virtual Network for AKS cluster (11.100.0.0/24)
+Virtual Network for AKS cluster (10.200.0.0/24)
 * Subnet Privatelinks: For Azure Key Vault, Container Registry and Azure Disk
 * Subnet Internal Load Balencer: For AKS-Managed Balancer
 
 ## HUB
-Virtual Network for connectivity (11.140.0.0/16)
+Virtual Network for connectivity (10.240.0.0/16)
 * Subnet Firewall: For outboud restrictions
 * Subnet Bastion: For VM Connectivity
 * Subnet VM: For VM to access to AKS

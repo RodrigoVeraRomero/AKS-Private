@@ -113,3 +113,6 @@ resource bastion 'Microsoft.Network/bastionHosts@2021-02-01' = {
 }
 
 
+output publicIp string = publicIPAddress.id
+
+
