@@ -33,11 +33,11 @@ This implementation need to save passwords for postgresql access in secure way u
 * Azure Key Vault
 
 ## Azure Files
-For Bonita Postgres data is necessary to share and persist volumes in different nodes whit azure files is possible to have this kind of volumes.
+For Bonita Postgres data is necessary to share and persist volumes in different nodes whit azure files is possible to have a storage account and a share file to have read and write access
 https://docs.microsoft.com/en-us/azure/aks/azure-files-dynamic-pv
 
 ## Private Link
-Private Link is an azure component that enable the private access to paas components in this architecture need to have private access to key vault, acr and azure files.
+Private Link is an azure component that enable the private access to paas components in this architecture need to have private access to key vault and azure files.
 
 ## VM
 VM is a jumb box to private cluster for this workload is an access to cluster management and also to Bonita workload
