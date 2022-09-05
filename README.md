@@ -7,9 +7,9 @@ https://hub.docker.com/_/bonita/
 
 https://wikipedia.org/wiki/Bonita_BPM
 
-## Challengue
+## Challenge
 
-Create AKS cluster that implement Bonita workload, this cluster may be totally private, and cover a complete security stantards, bonita is using a postgress SQL databases, this may be save data in volumes in case of cluster desaster. AKS cluster may be monitoring using grafana dashboard.
+Create AKS cluster that implement Bonita workload, this cluster may be totally private, and cover a complete security standard, bonita is using a postgress SQL databases, this may be save data in volumes in case of cluster disaster. AKS cluster may be monitoring using grafana dashboard.
 
 ### Thechnology
 
