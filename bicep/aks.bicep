@@ -7,6 +7,7 @@ param subnetId string
 param serviceCidr string
 param dnsServiceIP string
 param dockerBridgeCidr string
+param logAnalyticsID string
 
 resource resourceName_resource 'Microsoft.ContainerService/managedClusters@2022-06-01' = {
   location: location
@@ -54,7 +55,7 @@ resource resourceName_resource 'Microsoft.ContainerService/managedClusters@2022-
         enabled: false
       }
       azurepolicy: {
-        enabled: false
+        enabled: true
       }
       azureKeyvaultSecretsProvider: {
         enabled: true
@@ -62,6 +63,12 @@ resource resourceName_resource 'Microsoft.ContainerService/managedClusters@2022-
           enableSecretRotation: 'false'
           rotationPollInterval: '2m'
         }
+      }
+      omsagent: {
+        config: {
+          logAnalyticsWorkspaceResourceID: logAnalyticsID
+        }
+        enabled: true
       }
     }
   }

@@ -44,3 +44,4 @@ VM is a jumb box to private cluster for this workload is an access to cluster ma
 
 ## Diagram
 <img src="https://github.com/RodrigoVeraSYS/AKS-Private/blob/main/Img/Arquitecture.jpg" width="385px" align="center">
+

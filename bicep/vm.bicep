@@ -46,17 +46,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-03-01' = {
     osProfile: {
       computerName: machineName
       adminUsername: machineUser
-      linuxConfiguration: {
-        ssh: {
-          publicKeys: [
-            {
-              path: '/home/${machineUser}/.ssh/authorized_keys'
-              keyData: vmKey
-            }
-          ]
-        }
-        disablePasswordAuthentication: true
-      }
+      adminPassword: vmKey
     }
     hardwareProfile: {
       vmSize: 'Standard_B2s'
@@ -69,9 +59,9 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-03-01' = {
         }
       }
       imageReference: {
-        publisher: 'Canonical'
-        offer: 'UbuntuServer'
-        sku: '18.04-LTS'
+        publisher: 'MicrosoftWindowsServer'
+        offer: 'WindowsServer'
+        sku: '2019-datacenter-gensecond'
         version: 'latest'
       }
     }

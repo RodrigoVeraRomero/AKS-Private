@@ -26,9 +26,9 @@ Create AKS cluster that implement Bonita workload, this cluster may be totally p
 
 [Arquitecture](https://github.com/RodrigoVeraSYS/AKS-Private/blob/main/Docs/AzureArquitecture.md "Arquitecture")
 
-
-
 ### Azure Architecture Implementation
+
+[Arquitecture](https://github.com/RodrigoVeraSYS/AKS-Private/blob/main/Docs/AzureArchitectureImplementation.md "Arquitecture")
 
 ### AKS Implementation
 
