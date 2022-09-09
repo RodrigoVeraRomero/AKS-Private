@@ -4,15 +4,11 @@ param location string
 param tenant string
 
 @secure()
-param secretUser string
-@secure()
-param userValue string
-@secure()
 param secretPassword string
 @secure()
 param passwordValue string
 
-resource keyVault 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
+resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: keyVaultName
   location: location
   properties: {
@@ -21,6 +17,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
     enabledForDiskEncryption: false
     enableRbacAuthorization: true
     tenantId: tenant
+    publicNetworkAccess: 'Disabled'
     sku: {
       name: 'standard'
       family: 'A'
@@ -32,19 +29,12 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
   }
 }
 
-resource secretUserResource 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
-  name: secretUser
-  parent: keyVault
-  properties: {
-    value: userValue
-  }
-}
 resource secretPasswordResource 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
   name: secretPassword
   parent: keyVault
   properties: {
     value: passwordValue
-  }
+    }
 }
 
 output keyvaultId string = keyVault.id
