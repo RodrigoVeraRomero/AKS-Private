@@ -2,11 +2,12 @@ param privateKeyVaultName string
 param privateStorageName string
 param location string
 param subnetId string
-param vnetId string
+param vnetSpokeId string
+param vnetHubId string
 param keyVaultId string
 param storageId string
 
-var keyVaultEndpoint  = 'privatelink.vault.azure.net'
+var keyVaultEndpoint  = 'privatelink.vaultcore.azure.net'
 var fileEndpoint  = 'privatelink.file.core.windows.net'
 
 resource privateEndpointKeyVault 'Microsoft.Network/privateEndpoints@2022-01-01' = {
@@ -60,14 +61,26 @@ resource privateZoneVault 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   
 }
 
-resource privateDnsZoneLinkVault 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+resource privateDnsZoneLinkVaultHub 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
   parent: privateZoneVault
-  name: '${keyVaultEndpoint}-link'
+  name: '${keyVaultEndpoint}-Hub'
   location: 'global'
   properties: {
     registrationEnabled: false
     virtualNetwork: {
-      id: vnetId
+      id: vnetHubId
+    }
+  }
+}
+
+resource privateDnsZoneLinkVaultSpoke 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: privateZoneVault
+  name: '${keyVaultEndpoint}-Spoke'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnetSpokeId
     }
   }
 }
@@ -99,14 +112,26 @@ resource privateZoneFile 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   
 }
 
-resource privateDnsZoneLinkFile 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+resource privateDnsZoneLinkFileHub 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
   parent: privateZoneFile
-  name: '${fileEndpoint}-link'
+  name: '${fileEndpoint}-Hub'
   location: 'global'
   properties: {
     registrationEnabled: false
     virtualNetwork: {
-      id: vnetId
+      id: vnetHubId
+    }
+  }
+}
+
+resource privateDnsZoneLinkFileSpoke 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: privateZoneFile
+  name: '${fileEndpoint}-Spoke'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnetSpokeId
     }
   }
 }

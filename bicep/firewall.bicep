@@ -55,6 +55,9 @@ resource firewall 'Microsoft.Network/azureFirewalls@2021-05-01' = {
               ]
               targetFqdns: [
                 '*.docker.io' 
+                '*.file.core.windows.net'
+                '*.vaultcore.azure.net'
+                '*.management.azure.com'
               ]
               sourceAddresses: [
                 '10.200.0.0/24'
