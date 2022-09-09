@@ -35,8 +35,8 @@ param serviceCidr string = '10.0.0.0/16'
 param dnsServiceIP string = '10.0.0.10'
 param dockerBridgeCidr string = '172.17.0.1/16'
 
-// USER ADMIN AKS CHANGE YOUT USER ID
-param objectid string = '98f2cb4f-f871-4fe4-9777-581f037ff040'
+// USER ADMIN AKS CHANGE YOUR USER ID
+param objectid string = ''
 targetScope = 'subscription'
 
 /*RESOURCE GROUP*/

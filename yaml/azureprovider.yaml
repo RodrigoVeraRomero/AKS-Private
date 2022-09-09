@@ -6,8 +6,8 @@ spec:
   provider: azure
   secretObjects:
   - data:
-    - objectName: passwordpost 
-      key: passwordpost
+    - objectName: passwordpostgresql 
+      key: passwordpostgresql
     secretName: akvsecrets
     type: Opaque
   parameters:
