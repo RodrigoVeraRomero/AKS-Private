@@ -17,10 +17,8 @@ Create AKS cluster that implement Bonita workload, this cluster may be totally p
 * Postgres SQL
 * Azure Kubernetes Services
 * YAML
-* Grafana
-* Container Registry
 * Key Vault
-* Azure Disk
+* Azure Files
 
 ### Azure Architecture
 
@@ -28,9 +26,10 @@ Create AKS cluster that implement Bonita workload, this cluster may be totally p
 
 ### Azure Architecture Implementation
 
-[Architecture  Implementation](https://github.com/RodrigoVeraSYS/AKS-Private/blob/main/Docs/AzureArchitectureImplementation.md "Architecture  Implementation")
+[Architecture Implementation](https://github.com/RodrigoVeraSYS/AKS-Private/blob/main/Docs/AzureArchitectureImplementation.md "Architecture Implementation")
 
 ### AKS Implementation
 
-### Monitoring Implementation
+[AKS Application Implementation](https://github.com/RodrigoVeraSYS/AKS-Private/blob/main/Docs/AKSImplementation.md "AKS Application Implementation")
+
 

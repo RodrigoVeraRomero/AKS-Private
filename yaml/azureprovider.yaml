@@ -1,0 +1,26 @@
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: azure-kvname-user-msi
+spec:
+  provider: azure
+  secretObjects:
+  - data:
+    - objectName: passwordpost 
+      key: passwordpost
+    secretName: akvsecrets
+    type: Opaque
+  parameters:
+    usePodIdentity: "false"
+    useVMManagedIdentity: "true"          # Set to true for using managed identity
+    userAssignedIdentityID: "28d72142-d618-4383-9a7b-d866358aa4ac"   # Set the clientID of the user-assigned managed identity to use
+    keyvaultName: "keyvaultRVR"        # Set to the name of your Azure Key Vault instance
+    cloudName: ""                         # [OPTIONAL for Azure] if not provided, azure environment will default to AzurePublicCloud
+    objects:  |
+      array:
+        - |
+          objectName: passwordpostgresql
+          objectAlias: passwordpostgresql
+          objectType: secret
+          objectVersion: ""
+    tenantId: "72f988bf-86f1-41af-91ab-2d7cd011db47"   

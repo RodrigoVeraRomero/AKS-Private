@@ -9,32 +9,38 @@ This architecture is implemented using biceps that is a domain-specific language
 ## Biceps Files
 All biceps’ files are under the repository and the folder is bicep, in this folder are all the files necessary to deploy into azure a complete infrastructure of a base line private AKS as show in Architecture documentation.
 
-## main.bicep
+### main.bicep
 It's the main file to have all parameters and module definitions.
 
-## network.bicep
+### network.bicep
 This module create hub and spoke network and the peering between networks.
 
-## vm.bicep
+### vm.bicep
 This module creates Windows 2019 virtual machine that is a jumbox to aks and bastion. Azure Bastion provides a secure remote connection from the Azure portal to Azure virtual machines (VMs) over Transport Layer Security (TLS). Provision Azure Bastion to the same Azure virtual network as your VMs or to a peered virtual network. Then connect to any VM on that virtual network or a peered virtual network directly from the Azure portal. [Bastion](https://docs.microsoft.com/en-us/training/modules/connect-vm-with-azure-bastion/2-what-is-azure-bastion "Bastion")
 
-## firewall.bicep
+### firewall.bicep
 This module creates a firewall whit AKS rule, this is a security component that allow have a control egress endpoints to AKS. [Firewall](https://docs.microsoft.com/en-us/azure/firewall/overview "Firewall")
 
-## storage.bicep
+### storage.bicep
 This module creates a azure storage account and a file share this component save persistent data from Azure AKS aplication
 https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview
 
-## keyvault.bicep
+### keyvault.bicep
 This module creates a key vault this component save all secreted used by AKS. [Key Vault](https://docs.microsoft.com/en-us/azure/key-vault/general/ "Key Vault")
 
-## privateEndpoints.bicep
+### privateEndpoints.bicep
 This module create a private endpoints for azure file and key vault these components create a private ip that help internal communication between AKS and components. [Private Endpoint](https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-overview "Private Endpoint")
 
-## logAnalitycs.bicep
+### logAnalitycs.bicep
 Create a log analytics workspace, this component is for monitoring propose and have metric information of cluster infrastructure and containers. [Log Analytics](https://docs.microsoft.com/en-us/azure/automation/ "Log Analytics")
 
-## aks.biceps
+### aksidentity.biceps
+This module creates a managed identity that is necesary to create a custom private link for ASK and asign access control. 
+
+### roleassigments.biceps
+This module creates access control to AKS network and private link.
+
+### aks.biceps
 This module creates a private aks. [AKS](https://docs.microsoft.com/es-mx/azure/aks/ "AKS")
 
 # Bicep Implementation
@@ -52,3 +58,5 @@ az login
 az account set --subscription $SUBCRIPTION
 az deployment sub create --location eastus2 --template-file main.bicep
 ```
+* This script will take around 15 minutes to create complete infrastructure
+* Continue whit AKS Application Implementation [AKS Application Implementation](https://github.com/RodrigoVeraSYS/AKS-Private/blob/main/Docs/AKSImplementation.md "AKS Application Implementation")

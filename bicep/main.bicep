@@ -4,7 +4,7 @@ param location string = deployment().location
 param sopokeVnetName string = 'vnetSpoke'
 param hubVnetName string = 'vnetHub'
 param routeTableName string = 'routeTablervr'
-param machineName string = 'jumboxUbunturvr'
+param machineName string = 'VM-Jumbox-RVR'
 param machineUser string = 'machineUser'
 
 param vmKey string  = 'Miosa-.#Er334'
@@ -19,10 +19,9 @@ param storageName string = 'storageaccountrvr'
 param keyVaultName string = 'keyvaultRVR'
 
 
-param secretPassword string = 'PasswordPostgress'
+param secretPassword string = 'passwordpostgresql'
 param passwordValue string = 'npKdammFd-.4?ds'
-param secretUser  string = 'userpostgress'
-param userValue string = 'AdminPostgress'
+
 
 param privateKeyVaultName string = 'privatekeyvaultRVR'
 param privateStorageName string = 'privatestorageRVR'
@@ -36,7 +35,8 @@ param serviceCidr string = '10.0.0.0/16'
 param dnsServiceIP string = '10.0.0.10'
 param dockerBridgeCidr string = '172.17.0.1/16'
 
-
+// USER ADMIN AKS
+param objectid string = '98f2cb4f-f871-4fe4-9777-581f037ff040'
 targetScope = 'subscription'
 
 /*RESOURCE GROUP*/
@@ -54,7 +54,6 @@ module networking '../bicep/network.bicep' = {
     location: location
     sopokeVnetName: sopokeVnetName
     hubVnetName : hubVnetName
-    routeTableName : routeTableName
   }
 
 }
@@ -91,6 +90,7 @@ module firewall 'firewall.bicep' = {
     firewallName : firewallName
     subnetfirewall : networking.outputs.vnetHub.properties.subnets[0].Id
     publicFirewallIpName: publicFirewallIpName
+    routeTableName : routeTableName
   }
   dependsOn:[
     networking
@@ -102,6 +102,14 @@ module firewall 'firewall.bicep' = {
 /****************************************************************************************************************************/
 /********************************************************SPOKE COMPONENTS*****************************************************/
 /****************************************************************************************************************************/
+module aksidentity 'aksidentity.bicep'= {
+  scope: resourceGroup(rg.name)
+  name: 'aksidentity'
+  params:{
+    aksName:aksName
+    location:location
+  }
+}
 module storage 'storage.bicep' ={
    name:'storage'
    scope:resourceGroup(rg.name)
@@ -119,12 +127,12 @@ module keyV 'keyvault.bicep' ={
     keyVaultName: keyVaultName
     location: location
     passwordValue: passwordValue
-    userValue: userValue
-
     secretPassword: secretPassword
-    secretUser: secretUser
     tenant: subscription().tenantId  
   }
+  dependsOn:[
+    storage
+  ]
 }
 
 module privateEndponts 'privateEndpoints.bicep' = {
@@ -155,6 +163,20 @@ module logAnalytic 'logAnalytics.bicep' = {
   }
 }
 
+
+
+module aksroleassign 'roleassigments.bicep' = {
+  scope: resourceGroup(rg.name)
+  name: 'aksroleassign'
+  params:{
+    principalId: aksidentity.outputs.principalId
+  }
+ dependsOn:[
+  aksidentity
+  firewall
+ ]
+}
+
 module aks 'aks.bicep'={
   name: 'aks'
   scope: resourceGroup(rg.name)
@@ -168,9 +190,18 @@ module aks 'aks.bicep'={
     dnsServiceIP: dnsServiceIP
     dockerBridgeCidr : dockerBridgeCidr
     logAnalyticsID: logAnalytic.outputs.logAnalyticsId
+    vnetHubId: networking.outputs.vnetHubId
+    vnetSpokeId: networking.outputs.vnetSpokeId
+    identityId : aksidentity.outputs.id
+    objectid: objectid
+    
   }
   dependsOn:[
     networking
     logAnalytic
+    aksidentity
+    aksroleassign
   ]
 }
+
+

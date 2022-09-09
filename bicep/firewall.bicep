@@ -1,8 +1,10 @@
 param firewallName string
 param subnetfirewall string
 param publicFirewallIpName string
+param routeTableName string
 
 param location string = resourceGroup().location
+
 
 
 resource publicFirewallIPAddress 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
@@ -116,3 +118,21 @@ resource firewall 'Microsoft.Network/azureFirewalls@2021-05-01' = {
     ]
   }
  }
+
+ resource routeTable 'Microsoft.Network/routeTables@2021-03-01' = {
+  name: routeTableName
+  location: location
+  properties: {
+    disableBgpRoutePropagation: false
+    routes: [
+      {
+        name: 'FirewallDefaultRoute'
+        properties: {
+          addressPrefix: '0.0.0.0/0'
+          nextHopType: 'VirtualAppliance'
+          nextHopIpAddress: firewall.properties.ipConfigurations[0].properties.privateIPAddress
+        }
+      }
+    ]
+  }
+}

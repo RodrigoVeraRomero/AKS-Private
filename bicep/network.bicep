@@ -1,7 +1,7 @@
 param location string = resourceGroup().location
 param sopokeVnetName string = 'vnetSpoke'
 param hubVnetName string = 'vnetHub'
-param routeTableName string
+
 
 
 var hubConfig = {
@@ -32,24 +32,6 @@ resource networkSecurityGroupStandard 'Microsoft.Network/networkSecurityGroups@2
   }
 }
 
-resource routeTable 'Microsoft.Network/routeTables@2021-03-01' = {
-  name: routeTableName
-  location: location
-  properties: {
-    disableBgpRoutePropagation: false
-    routes: [
-      {
-        name: 'FirewallDefaultRoute'
-        properties: {
-          addressPrefix: '0.0.0.0/0'
-          nextHopType: 'VirtualAppliance'
-          nextHopIpAddress: hubConfig.hopeIdAddress
-        }
-      }
-    ]
-  }
-}
-
 resource vnetHub 'Microsoft.Network/virtualNetworks@2020-05-01' = {
   name: hubVnetName
   location: location
@@ -70,25 +52,16 @@ resource vnetHub 'Microsoft.Network/virtualNetworks@2020-05-01' = {
         name: hubConfig.subnetVm
         properties: {
           addressPrefix: hubConfig.subnetVmPrefix
+          networkSecurityGroup: {
+            id: networkSecurityGroupStandard.id
+          }
         }
+       
       }
       {
         name: hubConfig.subnetBastion
         properties: {
           addressPrefix: hubConfig.subnetBastionPrefix
-        }
-      }
-      {
-        name: hubConfig.serversSubnet
-        properties: {
-          addressPrefix: hubConfig.serversSubnetPrefix
-          routeTable: {
-            id: routeTable.id
-          }
-          
-          networkSecurityGroup: {
-            id: networkSecurityGroupStandard.id
-          }
         }
       }
     ]
@@ -153,6 +126,8 @@ resource VnetPeeringSHubSpoke 'Microsoft.Network/virtualNetworks/virtualNetworkP
 
 output vnetSpoke object = vnetSpoke
 output vnetHub object = vnetHub
+output vnetSpokeId string = vnetSpoke.id
+output vnetHubId string = vnetHub.id
 output spokeId string = vnetSpoke.id
 output nsg string = networkSecurityGroupStandard.id
 
