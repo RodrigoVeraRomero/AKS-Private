@@ -1,13 +1,13 @@
 # Azure Architecture Implementation
-This architecture is implemented using biceps that is a domain-specific language that uses declarative syntaxis to deploy Azure Resources. 
+This architecture is implemented using bicep that is a domain-specific language that uses declarative syntaxis to deploy Azure Resources. 
 
 * [Arquitecture](https://github.com/RodrigoVeraSYS/AKS-Private/blob/main/Docs/AzureArquitecture.md "Architecture")
 
 * [Bicep](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/overview?tabs=bicep "Bicep")
 
 
-## Biceps Files
-All biceps’ files are under the repository and the folder is bicep, in this folder are all the files necessary to deploy into azure a complete infrastructure of a base line private AKS as show in Architecture documentation.
+## Bicep Files
+All bicep’ files are under the repository and the folder is bicep, in this folder are all the files necessary to deploy into azure a complete infrastructure of a base line private AKS as show in Architecture documentation.
 
 ### main.bicep
 It's the main file to have all parameters and module definitions.
@@ -22,8 +22,7 @@ This module creates Windows 2019 virtual machine that is a jumbox to aks and bas
 This module creates a firewall whit AKS rule, this is a security component that allow have a control egress endpoints to AKS. [Firewall](https://docs.microsoft.com/en-us/azure/firewall/overview "Firewall")
 
 ### storage.bicep
-This module creates a azure storage account and a file share this component save persistent data from Azure AKS aplication
-https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview
+This module creates a azure storage account and a file share this component save persistent data from Azure AKS aplication [Storage](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview "Storage")
 
 ### keyvault.bicep
 This module creates a key vault this component save all secreted used by AKS. [Key Vault](https://docs.microsoft.com/en-us/azure/key-vault/general/ "Key Vault")
@@ -34,13 +33,13 @@ This module create a private endpoints for azure file and key vault these compon
 ### logAnalitycs.bicep
 Create a log analytics workspace, this component is for monitoring propose and have metric information of cluster infrastructure and containers. [Log Analytics](https://docs.microsoft.com/en-us/azure/automation/ "Log Analytics")
 
-### aksidentity.biceps
+### aksidentity.bicep
 This module creates a managed identity that is necesary to create a custom private link for ASK and asign access control. 
 
-### roleassigments.biceps
+### roleassigments.bicep
 This module creates access control to AKS network and private link.
 
-### aks.biceps
+### aks.bicep
 This module creates a private aks. [AKS](https://docs.microsoft.com/es-mx/azure/aks/ "AKS")
 
 # Bicep Implementation
